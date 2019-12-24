@@ -204,7 +204,8 @@ namespace DNDTest
                     uint thirtyBits = (uint)rng.Next(1 << 30);
                     uint twoBits = (uint)rng.Next(1 << 2);
                     seed = (thirtyBits << 2) | twoBits;
-                    Console.WriteLine("Displaying map for seed " + (int)seed);
+                    Console.WriteLine("Creating map for seed " + (int)seed + " press any key to continue.");
+                    Console.Read();
                     break;
                 case 2:
                     Console.Clear();
@@ -221,12 +222,21 @@ namespace DNDTest
 
             WorldMap campaignMap = new WorldMap(seed);
 
+            PlayCampaign(campaignMap);
+
+            Console.ReadLine();
+        }
+
+        private static void PrintMap(WorldMap map)
+        {
+
+
             int ctr = 1;
-            foreach(var location in campaignMap.MapGrid)
+            foreach (var location in map.MapGrid)
             {
                 Console.Write(location.LocationType + "\t" + (location.LocationType == LocationType.Mountain ? "" : "\t"));
 
-                if (ctr == Math.Sqrt(campaignMap.MapGrid.Count))
+                if (ctr == Math.Sqrt(map.MapGrid.Count))
                 {
                     Console.WriteLine("\n");
                     ctr = 0;
@@ -234,8 +244,48 @@ namespace DNDTest
 
                 ctr++;
             }
+        }
 
-            Console.ReadLine();
+        private static void PlayCampaign(WorldMap map)
+        {
+            ILocation curLoc = map.MapGrid[0];
+            string input = "";
+
+            Console.Clear();
+            while (input.Trim().ToUpper() != "EXIT")
+            {
+                PrintMap(map);
+
+                Console.WriteLine("You are in a " + curLoc.LocationType);
+                Console.WriteLine("What do you do?");
+                Console.Write(">");
+
+                input = Console.ReadLine();
+                Console.Clear();
+
+                if (input.ToUpper().Contains("MOVE") || input.ToUpper().Contains("TRAVEL"))
+                {
+                    Console.Write("You leave the " + curLoc.LocationType + " and head ");
+                    if (input.ToUpper().Contains("NORTH"))
+                    {
+                        Console.WriteLine("North");
+                        curLoc = curLoc.North;
+                    }else if (input.ToUpper().Contains("SOUTH"))
+                    {
+                        Console.WriteLine("South");
+                        curLoc = curLoc.South;
+                    }else if (input.ToUpper().Contains("EAST"))
+                    {
+                        Console.WriteLine("East");
+                        curLoc = curLoc.East;
+                    }else if (input.ToUpper().Contains("WEST"))
+                    {
+                        Console.WriteLine("West");
+                        curLoc = curLoc.West;
+                    }
+
+                }
+            }
         }
 
         private static Character AssignScores(List<int> abilityScores, Character result)

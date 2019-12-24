@@ -14,9 +14,9 @@ namespace DNDTest
             var rowLength = prng.IRandom(3, 6);
             int mapSize = rowLength * rowLength;
             int tmpIndex;
-            ILocation tmpLoc, lastLoc = null;
+            ILocation tmpLoc;
 
-            List<ILocation> tmpRow, lastRow = new List<ILocation>();
+            List<ILocation> lastRow = new List<ILocation>();
             var locTypes = (LocationType[])Enum.GetValues(typeof(LocationType));
 
 
